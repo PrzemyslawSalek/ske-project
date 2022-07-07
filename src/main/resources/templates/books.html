@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Zarządzaj książkami</title>
@@ -9,7 +9,7 @@
 <div class="container-fluid text-center">
     <h1>Zarządzaj książkami!</h1>
     <div class="m-2">
-        <a class="h3" th:href="@{/books/add}">Dodaj nową książkę</a>
+        <a class="h3" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/books/add}">Dodaj nową książkę</a>
     </div>
 
     <div th:if="${message}" class="alert alert-success text-center">
@@ -36,8 +36,8 @@
                     <td>[[${book.publishing}]]</td>
                     <td>[[${book.category.name}]]</td>
                     <td>
-                        <a class="h2 mr-3" th:href="@{'/books/edit/' + ${book.id}}">Edytuj</a>
-                        <a class="h2 mr-3" th:href="@{'/books/delete/' + ${book.id}}">Usuń</a>
+                        <a class="h2 mr-3" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{'/books/edit/' + ${book.id}}">Edytuj</a>
+                        <a class="h2 mr-3" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{'/books/delete/' + ${book.id}}">Usuń</a>
                     </td>
                 </tr>
             </th:block>

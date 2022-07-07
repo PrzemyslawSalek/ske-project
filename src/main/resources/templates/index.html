@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Booksale</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" type="text/css"/>
 </head>
 <body>
-    <div class="container-fluid text-center">
-        <h1>Witaj na Booksale.pl!</h1>
-        <a class="h2" th:href="@{/books}">Zarządzaj książkami</a>
-    </div>
+<div class="container-fluid text-center">
+    <h1>Witaj na Booksale.pl!</h1>
+    <a class="h2" th:href="@{/books}">Zarządzaj książkami</a>
+    <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+    <form method="post" th:action="@{/logout}">
+        <input type="submit" value="Sign Out"/>
+    </form>
+</div>
 </body>
 </html>

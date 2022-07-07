@@ -15,7 +15,8 @@ import java.util.List;
 
 @Controller
 public class BookController {
-    @Autowired private BookService bookService;
+    @Autowired
+    private BookService bookService;
 
     @GetMapping("/books")
     public String showBookList(Model model) {
@@ -55,7 +56,7 @@ public class BookController {
     public String deleteBook(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
         try {
             bookService.delete(id);
-            redirectAttributes.addFlashAttribute("message","Książka o numerze " + id + " została usunięta.");
+            redirectAttributes.addFlashAttribute("message", "Książka o numerze " + id + " została usunięta.");
         } catch (BookNotFoundException e) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());
         }
