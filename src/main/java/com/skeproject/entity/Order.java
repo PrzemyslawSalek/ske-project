@@ -11,6 +11,16 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
+    @Column(name = "price")
+    private double price;
+    @Column(name = "currency")
+    private String currency;
+    @Column(name = "method")
+    private String method;
+    @Column(name = "intent")
+    private String intent;
+    @Column(name = "description")
+    private String description;
     @Column(name = "status")
     private String status;
     @Column(name = "completed")
@@ -32,6 +42,50 @@ public class Order {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
+    public String getIntent() {
+        return intent;
+    }
+
+    public void setIntent(String intent) {
+        this.intent = intent;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setBooks(Set<Book> books) {
+        this.books = books;
     }
 
     public String getStatus() {
@@ -70,6 +124,11 @@ public class Order {
     public String toString() {
         return "Order{" +
                 "id=" + id +
+                ", price=" + price +
+                ", currency='" + currency + '\'' +
+                ", method='" + method + '\'' +
+                ", intent='" + intent + '\'' +
+                ", description='" + description + '\'' +
                 ", status='" + status + '\'' +
                 ", completed=" + completed +
                 ", user=" + user +

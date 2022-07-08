@@ -34,7 +34,7 @@
                     <td>[[${book.publishing}]]</td>
                     <td>[[${book.category.name}]]</td>
                     <td sec:authorize="hasRole('ROLE_USER')">
-                        <form method="post" th:action="${'/cart/save'}">
+                        <form method="post" th:action="${'/cart/pay'}">
                             <input id="bookId" name="bookId" th:value="${book.id}" type="hidden"/>
                             <button type="submit">Save</button>
                         </form>

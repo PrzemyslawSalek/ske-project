@@ -44,4 +44,10 @@ public class OrderService {
         order.setCompleted(true);
         orderRepository.save(order);
     }
+
+    public void changeStatus(Integer id, String status) {
+        Order order = orderRepository.findById(id).orElse(new Order());;
+        order.setStatus(status);
+        orderRepository.save(order);
+    }
 }
