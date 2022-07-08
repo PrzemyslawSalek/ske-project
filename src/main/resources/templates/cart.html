@@ -2,16 +2,12 @@
 <html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Zarządzaj książkami</title>
+    <title>Zarządzaj książkami w koszyku</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" type="text/css"/>
 </head>
 <body>
 <div class="container-fluid text-center">
-    <h1>Zarządzaj książkami!</h1>
-    <div class="m-2">
-        <a class="h3" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/books/add}">Dodaj nową książkę</a>
-    </div>
-
+    <h1>Zarządzaj książkami w koszyku!</h1>
     <div class="alert alert-success text-center" th:if="${message}">
         [[${message}]]
     </div>
@@ -25,30 +21,28 @@
                 <th>Price</th>
                 <th>Publishing</th>
                 <th>Category</th>
-
-                <th sec:authorize="hasRole('ROLE_ADMIN')">Edytuj/Usuń</th>
-
-                <th sec:authorize="hasRole('ROLE_USER')">Do koszyka</th>
+                <th sec:authorize="hasRole('ROLE_USER')">Zamów</th>
+                <th sec:authorize="hasRole('ROLE_USER')">Usuń z zamówienia</th>
             </tr>
             </thead>
             <tbody>
-            <th:block th:each="book : ${listBooks}">
+            <th:block th:each="book : ${books}">
                 <tr>
                     <td>[[${book.id}]]</td>
                     <td>[[${book.name}]]</td>
                     <td>[[${book.price}]]</td>
                     <td>[[${book.publishing}]]</td>
                     <td>[[${book.category.name}]]</td>
-                    <td sec:authorize="hasRole('ROLE_ADMIN')">
-                        <a class="h2 mr-3"
-                           th:href="@{'/books/edit/' + ${book.id}}">Edytuj</a>
-                        <a class="h2 mr-3"
-                           th:href="@{'/books/delete/' + ${book.id}}">Usuń</a>
+                    <td sec:authorize="hasRole('ROLE_USER')">
+                        <form method="post" th:action="${'/cart/save'}">
+                            <input id="bookId" name="bookId" th:value="${book.id}" type="hidden"/>
+                            <button type="submit">Save</button>
+                        </form>
                     </td>
                     <td sec:authorize="hasRole('ROLE_USER')">
-                        <form method="post" th:action="${'/cart/add'}">
+                        <form method="post" th:action="${'/cart/delete'}">
                             <input id="bookId" name="bookId" th:value="${book.id}" type="hidden"/>
-                            <button type="submit">Do koszyka</button>
+                            <button type="submit">Save</button>
                         </form>
                     </td>
                 </tr>

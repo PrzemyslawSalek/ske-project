@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Zarządzaj książkami w koszyku</title>
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" type="text/css"/>
+</head>
+<body>
+<div class="container-fluid text-center">
+  <h1>Zarządzaj książkami w koszyku!</h1>
+  <div class="alert alert-success text-center" th:if="${message}">
+    [[${message}]]
+  </div>
+
+  <div>
+    <table class="table table-bordered">
+      <thead class="thead-dark">
+      <tr>
+        <th>ID</th>
+        <th>Completed</th>
+        <th>Status</th>
+        <th>User</th>
+        <th>Usuń z zamówienia</th>
+      </tr>
+      </thead>
+      <tbody>
+      <th:block th:each="order : ${orders}">
+        <tr>
+          <td>[[${order.id}]]</td>
+          <td>[[${order.completed}]]</td>
+          <td>[[${order.status}]]</td>
+          <td>[[${order.user.username}]]</td>
+          <td>
+            <form method="post" th:action="${'/orders/complete'}">
+              <input id="orderId" name="orderId" th:value="${order.id}" type="hidden"/>
+              <button type="submit">Save</button>
+            </form>
+          </td>
+        </tr>
+      </th:block>
+      </tbody>
+    </table>
+  </div>
+</div>
+</body>
+</html>

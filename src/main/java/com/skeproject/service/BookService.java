@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class BookService {
@@ -15,6 +16,10 @@ public class BookService {
 
     public List<Book> listAll(){
         return (List<Book>) bookRepository.findAll();
+    }
+
+    public List<Book> getBooks(Set<Integer> ids){
+        return (List<Book>) bookRepository.findAllById(ids);
     }
 
     public void save(Book book) {
@@ -36,4 +41,6 @@ public class BookService {
         }
         bookRepository.deleteById(id);
     }
+
+
 }

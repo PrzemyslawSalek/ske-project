@@ -25,8 +25,9 @@ public class User implements UserDetails {
     private boolean accountNonLocked;
     private String roles;
 
-    public User() {
-    }
+    public User() {}
+
+    public User(String username) {this.username = username;}
 
     public User(String username, String password, boolean accountNonLocked) {
         this.username = username;

@@ -28,6 +28,7 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
     private Set<Author> authors;
+
     public Book() {
     }
     public Book(String name, String publishing, float price) {

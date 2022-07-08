@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Zarządzaj książkami w koszyku</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" type="text/css"/>
+</head>
+<body>
+<div class="container-fluid text-center">
+    <h1>Zarządzaj książkami w koszyku!</h1>
+    <div class="alert alert-success text-center" th:if="${message}">
+        [[${message}]]
+    </div>
+
+    <div>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Publishing</th>
+                <th>Category</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="book : ${books}">
+                <tr>
+                    <td>[[${book.id}]]</td>
+                    <td>[[${book.name}]]</td>
+                    <td>[[${book.price}]]</td>
+                    <td>[[${book.publishing}]]</td>
+                    <td>[[${book.category.name}]]</td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
