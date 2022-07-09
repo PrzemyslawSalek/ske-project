@@ -65,9 +65,10 @@ public class CartController {
     public String deleteFromCart(@RequestParam(name = "bookId") int id, RedirectAttributes redirectAttributes) {
         try {
             cart.deleteBookId(id);
+            cart.setPrice(cart.getPrice() - bookService.get(id).getPrice());
             redirectAttributes.addFlashAttribute("message",
                     "Usunięto z koszyka - " + bookService.get(id).getName());
-            return "redirect:/cart";
+            return "redirect:/books";
         } catch (BookNotFoundException e) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());
             return "redirect:/books";
@@ -100,6 +101,7 @@ public class CartController {
             order.setBooks(new HashSet<>(bookService.getBooks(cart.getBookIds())));
             orderService.save(order);
             cart.getBookIds().clear();
+            cart.setPrice(0);
 
             Payment payment = paypalService.createPayment(order.getPrice(), order.getCurrency(), order.getMethod(),
                     order.getIntent(), order.getDescription(), "http://localhost:8080/order/cancel/" + order.getId(),
