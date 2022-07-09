@@ -65,7 +65,7 @@ public class MainController {
         } else if (exception instanceof LockedException) {
             error = exception.getMessage();
         } else {
-            error = "Niepoprawna nazwa użytkownika lub hasło!";
+            error = "Zaloguj się, aby uzyskać dostęp do całej zawartości!";
         }
         return error;
     }

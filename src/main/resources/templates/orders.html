@@ -58,16 +58,41 @@
                         <th:block th:each="order : ${orders}">
                             <tr>
                                 <td>[[${order.id}]]</td>
-                                <td>[[${order.completed}]]</td>
-                                <td>[[${order.price}]]</td>
+                                <td>
+                                    <div th:switch="${order.completed}">
+                                        <div th:case="true">
+                                            TAK
+                                        </div>
+                                        <div th:case="false">
+                                            NIE
+                                        </div>
+                                    </div>
+                                    </td>
+                                <td>[[${order.price}]] PLN</td>
                                 <td sec:authorize="hasRole('ROLE_ADMIN')">[[${order.user.username}]]</td>
-                                <td>[[${order.status}]]</td>
+                                <td><div th:switch="${order.status}">
+                                    <div style="pointer-events: none;" class="btn btn-success" th:case="'opłacone'">
+                                        [[${order.status}]]
+                                    </div>
+                                    <div style="pointer-events: none;" class="btn btn-secondary" th:case="'złożone'">
+                                        [[${order.status}]]
+                                    </div>
+                                    <div style="pointer-events: none;" class="btn btn-danger" th:case="'nieopłacone'">
+                                        [[${order.status}]]
+                                    </div>
+                                    <div style="pointer-events: none;" class="btn btn-dark" th:case="*">>
+                                        [[${order.status}]]
+                                    </div>
+                                </div></td>
                                 <td sec:authorize="hasRole('ROLE_ADMIN')">
-                                    <div style="display: inline-flex; gap: 20px;">
-                                        <form method="post"
+                                    <div th:switch="${order.completed}" style="display: inline-flex; gap: 20px;">
+                                        <form th:case="false" method="post"
                                               th:action="${'/orders/complete'}">
                                             <input id="orderId" name="orderId" th:value="${order.id}" type="hidden"/>
                                             <button class="btn btn-primary" type="submit">Skompletuj</button>
+                                        </form>
+                                        <form th:case="true">
+                                            <button style="pointer-events: none;" class="btn btn-secondary" type="submit">Skompletuj</button>
                                         </form>
                                     </div>
                                 </td>
