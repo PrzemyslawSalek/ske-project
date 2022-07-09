@@ -2,6 +2,7 @@ package com.skeproject.service;
 
 import com.skeproject.entity.Book;
 import com.skeproject.entity.Order;
+import com.skeproject.entity.User;
 import com.skeproject.exceptions.BookNotFoundException;
 import com.skeproject.exceptions.OrderNotFoundException;
 import com.skeproject.repository.OrderRepository;
@@ -21,8 +22,8 @@ public class OrderService {
         return (List<Order>) orderRepository.findAll();
     }
 
-    public List<Order> getOrders(Set<Integer> ids){
-        return (List<Order>) orderRepository.findAllById(ids);
+    public List<Order> getOrdersByUser(User user){
+        return (List<Order>) orderRepository.findByUser(user);
     }
 
     public Set<Book> getBooks(Integer id){

@@ -82,8 +82,11 @@
                         <h3 class="pt-4 pb-2" th:inline="text">Co chcesz zrobić
                             [[${#httpServletRequest.remoteUser}]]?</h3>
                         <div style="display: flex; justify-content: center; gap: 15px;">
-                            <form method="get" th:action="@{/books}">
+                            <form sec:authorize="hasRole('ROLE_USER')" method="get" th:action="@{/books}">
                                 <button class="btn btn-primary" type="submit">Złóż zamówienie</button>
+                            </form>
+                            <form sec:authorize="hasRole('ROLE_ADMIN')" method="get" th:action="@{/books}">
+                                <button class="btn btn-primary" type="submit">Zarządzaj książkami</button>
                             </form>
                             <form method="get" th:action="@{/orders}">
                                 <button class="btn btn-secondary" type="submit">Zobacz zamówienia</button>

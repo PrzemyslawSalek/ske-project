@@ -29,14 +29,17 @@
             </div>
         </nav>
     </header>
-    <main style="display: flex; flex-direction: column; height: 100%; overflow: hidden;">
+    <main style="display: flex; flex-direction: column; height: 100%; overflow: hidden; overflow-y: auto;">
         <div class="m-1 p-2" style="width: 100%; height: 100%;">
             <div class="card-body text-center" style="display: flex; flex-direction: column; height: 100%;">
                 <div class="pb-2" style="display: flex; justify-content: space-between;">
                     <h3>Koszyk</h3>
-                    <div>
+                    <div style="display: flex; gap: 25px;">
                         <div class="alert alert-success text-center" style="margin: 0;" th:if="${message}">
                             [[${message}]]
+                        </div>
+                        <div style="align-self: center;" class="font-weight-bold">
+                            [[${cart.getPrice()}]] PLN
                         </div>
                         <form method="post" th:action="${'/cart/pay'}">
                             <button class="btn btn-dark" type="submit">Zamów</button>

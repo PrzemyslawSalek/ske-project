@@ -43,6 +43,7 @@ public class CartController {
     @GetMapping
     public String cart(Model model) {
         model.addAttribute("books", bookService.getBooks(cart.getBookIds()));
+        model.addAttribute("cart", cart);
         return "cart";
     }
 
@@ -50,6 +51,7 @@ public class CartController {
     public String addToCart(@RequestParam(name = "bookId") int id, RedirectAttributes redirectAttributes) {
         try {
             cart.addBookId(id);
+            cart.setPrice(cart.getPrice() + bookService.get(id).getPrice());
             redirectAttributes.addFlashAttribute("message",
                     "Dodano do koszyka - " + bookService.get(id).getName());
             return "redirect:/books";
@@ -85,11 +87,11 @@ public class CartController {
     }
 
     @PostMapping("/pay")
-    public String payment(Authentication authentication, RedirectAttributes redirectAttributes) {
+    public String payment(Authentication authentication) {
         try {
             Order order = new Order();
             order.setStatus("złożone");
-            order.setPrice(213);
+            order.setPrice(cart.getPrice());
             order.setCurrency("PLN");
             order.setMethod("paypal");
             order.setIntent("SALE");

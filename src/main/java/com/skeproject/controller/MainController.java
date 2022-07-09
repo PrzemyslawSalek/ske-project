@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 @Controller
-public class HelloController {
+public class MainController {
     @Autowired
     private SecurityUserDetailsService userDetailsManager;
     @Autowired
