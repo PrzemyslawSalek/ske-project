@@ -64,10 +64,12 @@ public class CartController {
     @PostMapping("/delete")
     public String deleteFromCart(@RequestParam(name = "bookId") int id, RedirectAttributes redirectAttributes) {
         try {
-            cart.deleteBookId(id);
-            cart.setPrice(cart.getPrice() - bookService.get(id).getPrice());
-            redirectAttributes.addFlashAttribute("message",
-                    "Usunięto z koszyka - " + bookService.get(id).getName());
+            if (cart.getBookIds().contains(id)) {
+                cart.deleteBookId(id);
+                cart.setPrice(cart.getPrice() - bookService.get(id).getPrice());
+                redirectAttributes.addFlashAttribute("message",
+                        "Usunięto z koszyka - " + bookService.get(id).getName());
+            }
             return "redirect:/books";
         } catch (BookNotFoundException e) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());
