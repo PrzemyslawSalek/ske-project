@@ -2,40 +2,78 @@
 <html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Zarządzaj książkami w koszyku</title>
+    <title>Zamówienie</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" type="text/css"/>
 </head>
 <body>
-<div class="container-fluid text-center">
-    <h1>Zarządzaj książkami w koszyku!</h1>
-    <div class="alert alert-success text-center" th:if="${message}">
-        [[${message}]]
-    </div>
+<div style="display: flex; flex-direction: column; justify-content: space-between; height: 100vh; width: 100vw;">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" th:href=@{/}>Booksale.pl</a>
+            <button aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation"
+                    class="navbar-toggler"
+                    data-target="#navbarNavAltMarkup" data-toggle="collapse" type="button">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="justify-content-between flex-box collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link active" th:href="@{/books}">Książki</a>
+                    <a class="nav-item nav-link active" th:href="@{/orders}">Zamówienia</a>
+                </div>
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link active" sec:authorize="!isAuthenticated()" th:href="@{/login}">Zaloguj
+                        się</a>
+                    <a class="nav-item nav-link active" sec:authorize="isAuthenticated()" th:href="@{/logout}">Wyloguj
+                        się</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main style="display: flex; flex-direction: column; height: 100%; overflow: hidden;">
+        <div class="m-1 p-2" style="width: 100%; height: 100%;">
+            <div class="card-body text-center" style="display: flex; flex-direction: column; height: 100%;">
+                <div class="pb-2" style="display: flex; justify-content: space-between;">
+                    <h3>Twoje zamówienie</h3>
+                    <div>
+                        <div class="alert alert-success text-center" style="margin: 0;" th:if="${message}">
+                            [[${message}]]
+                        </div>
+                    </div>
+                </div>
 
-    <div>
-        <table class="table table-bordered">
-            <thead class="thead-dark">
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Publishing</th>
-                <th>Category</th>
-            </tr>
-            </thead>
-            <tbody>
-            <th:block th:each="book : ${books}">
-                <tr>
-                    <td>[[${book.id}]]</td>
-                    <td>[[${book.name}]]</td>
-                    <td>[[${book.price}]]</td>
-                    <td>[[${book.publishing}]]</td>
-                    <td>[[${book.category.name}]]</td>
-                </tr>
-            </th:block>
-            </tbody>
-        </table>
-    </div>
+                <div>
+                    <table class="table table-bordered">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nazwa</th>
+                            <th>Cena</th>
+                            <th>Wydawnictwo</th>
+                            <th>Kategoria</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <th:block th:each="book : ${books}">
+                            <tr>
+                                <td>[[${book.id}]]</td>
+                                <td>[[${book.name}]]</td>
+                                <td>[[${book.price}]]</td>
+                                <td>[[${book.publishing}]]</td>
+                                <td>[[${book.category.name}]]</td>
+                            </tr>
+                        </th:block>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="bg-light text-center text-lg-start">
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            © 2022 Przemysław Sałek -
+            <a class="text-dark" href="https://github.com/PrzemyslawSalek/ske-project">Ske-Project</a>
+        </div>
+    </footer>
 </div>
 </body>
 </html>

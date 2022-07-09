@@ -6,6 +6,7 @@ import com.paypal.base.rest.PayPalRESTException;
 import com.skeproject.entity.Cart;
 import com.skeproject.entity.Order;
 import com.skeproject.entity.User;
+import com.skeproject.exceptions.BookNotFoundException;
 import com.skeproject.service.BookService;
 import com.skeproject.service.OrderService;
 import com.skeproject.service.PaypalService;
@@ -46,15 +47,29 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public String addToCart(@RequestParam(name = "bookId") int id) {
-        cart.addBookId(id);
-        return "redirect:/cart";
+    public String addToCart(@RequestParam(name = "bookId") int id, RedirectAttributes redirectAttributes) {
+        try {
+            cart.addBookId(id);
+            redirectAttributes.addFlashAttribute("message",
+                    "Dodano do koszyka - " + bookService.get(id).getName());
+            return "redirect:/books";
+        } catch (BookNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+            return "redirect:/books";
+        }
     }
 
     @PostMapping("/delete")
-    public String deleteFromCart(@RequestParam(name = "bookId") int id) {
-        cart.deleteBookId(id);
-        return "redirect:/books";
+    public String deleteFromCart(@RequestParam(name = "bookId") int id, RedirectAttributes redirectAttributes) {
+        try {
+            cart.deleteBookId(id);
+            redirectAttributes.addFlashAttribute("message",
+                    "Usunięto z koszyka - " + bookService.get(id).getName());
+            return "redirect:/cart";
+        } catch (BookNotFoundException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+            return "redirect:/books";
+        }
     }
 
     @PostMapping("/save")
@@ -82,6 +97,7 @@ public class CartController {
             order.setUser(new User(authentication.getName()));
             order.setBooks(new HashSet<>(bookService.getBooks(cart.getBookIds())));
             orderService.save(order);
+            cart.getBookIds().clear();
 
             Payment payment = paypalService.createPayment(order.getPrice(), order.getCurrency(), order.getMethod(),
                     order.getIntent(), order.getDescription(), "http://localhost:8080/order/cancel/" + order.getId(),

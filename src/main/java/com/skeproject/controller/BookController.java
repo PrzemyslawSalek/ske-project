@@ -44,7 +44,7 @@ public class BookController {
         try {
             Book book = bookService.get(id);
             model.addAttribute("book", book);
-            model.addAttribute("pageTitle", "Edytuj książkę (ID: " + id + ")");
+            model.addAttribute("pageTitle", "Edytuj książkę (" + book.getName() + ")");
             return "books_form";
         } catch (BookNotFoundException e) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());

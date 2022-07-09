@@ -17,11 +17,13 @@ public class ApplicationConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .authorizeRequests().antMatchers("/books").hasAnyRole("USER", "ADMIN")
+                .csrf().disable().authorizeRequests()
+                .antMatchers("/css/**", "/js/**", "/webjars/**").permitAll()
+                .antMatchers("/").permitAll()
+                .antMatchers("/books").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/books/add", "/books/edit", "/books/delete").hasRole("ADMIN")
-                .antMatchers("/").permitAll().antMatchers("/register**")
-                .permitAll().anyRequest().authenticated()
+                .antMatchers("/register**").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login")
                 .permitAll()

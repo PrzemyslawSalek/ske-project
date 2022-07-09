@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -24,16 +25,15 @@ public class HelloController {
     private PasswordEncoder passwordEncoder;
 
     @GetMapping("/")
-    public String index() {
+    public String index(HttpServletRequest request, HttpSession session) {
         return "index";
     }
 
     @GetMapping("/login")
-    public String login(HttpServletRequest request, HttpSession session) {
-        session.setAttribute(
-                "error", getErrorMessage(request, "SPRING_SECURITY_LAST_EXCEPTION")
-        );
-        return "login";
+    public String login(HttpServletRequest request, HttpSession session, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("message", getErrorMessage(request, "SPRING_SECURITY_LAST_EXCEPTION"));
+
+        return "redirect:/";
     }
 
     @GetMapping("/register")
@@ -46,23 +46,26 @@ public class HelloController {
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = {
             MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
     )
-    public void addUser(@RequestParam Map<String, String> body) {
+    public String addUser(@RequestParam Map<String, String> body, RedirectAttributes redirectAttributes) {
         User user = new User();
         user.setUsername(body.get("username"));
-        user.setPassword(passwordEncoder.encode(body.get("password")));
+        user.setPassword(body.get("password"));
+        user.setRoles("ROLE_USER");
         user.setAccountNonLocked(true);
         userDetailsManager.createUser(user);
+        redirectAttributes.addFlashAttribute("message_success", "Konto założone poprawnie!");
+        return "redirect:/";
     }
 
     private String getErrorMessage(HttpServletRequest request, String key) {
         Exception exception = (Exception) request.getSession().getAttribute(key);
         String error = "";
         if (exception instanceof BadCredentialsException) {
-            error = "Invalid username and password!";
+            error = "Niepoprawna nazwa użytkownika lub hasło!";
         } else if (exception instanceof LockedException) {
             error = exception.getMessage();
         } else {
-            error = "Invalid username and password!";
+            error = "Niepoprawna nazwa użytkownika lub hasło!";
         }
         return error;
     }

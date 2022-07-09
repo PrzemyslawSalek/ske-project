@@ -35,9 +35,6 @@ public class AuthProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication)
             throws AuthenticationException {
-
-        System.out.println("authenticate " + authentication);
-
         final String username = (authentication.getPrincipal() == null) ? "NONE_PROVIDED" : authentication.getName();
         UserDetails user = null;
 
@@ -45,17 +42,25 @@ public class AuthProvider implements AuthenticationProvider {
             user = userDetailsService.loadUserByUsername(username);
             Optional<Attempts>
                     userAttempts = attemptsRepository.findAttemptsByUsername(username);
-            if (userAttempts.isPresent()) {
-                Attempts attempts = userAttempts.get();
-                attempts.setAttempts(0);
-                attemptsRepository.save(attempts);
-                return createSuccessfulAuthentication(authentication, user);
+            if (user.getPassword().equals(authentication.getCredentials())) {
+                if(userAttempts.isPresent()) {
+                    Attempts attempts = userAttempts.get();
+                    attempts.setAttempts(0);
+                    attemptsRepository.save(attempts);
+                    return createSuccessfulAuthentication(authentication, user);
+                } else {
+                    Attempts attempts = new Attempts();
+                    attempts.setUsername(username);
+                    attempts.setAttempts(1);
+                    attemptsRepository.save(attempts);
+                    return createSuccessfulAuthentication(authentication, user);
+                }
             } else {
                 processFailedAttempts(username, (User) user);
                 return null;
             }
         } catch (UsernameNotFoundException exception) {
-            throw new BadCredentialsException("invalid login details");
+            throw new BadCredentialsException("Niepoprawna nazwa użytkownika lub hasło!");
         }
     }
 
@@ -76,7 +81,7 @@ public class AuthProvider implements AuthenticationProvider {
                     ATTEMPTS_LIMIT) {
                 user.setAccountNonLocked(false);
                 userRepository.save(user);
-                throw new LockedException("Too many invalid attempts. Account is locked!!");
+                throw new LockedException("Zbyt wiele nieudanych prób! Konto zablokowane!");
             }
         }
     }

@@ -1,27 +1,78 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="ISO-8859-1">
-    <title>Insert title here</title>
+    <meta charset="UTF-8">
+    <title>Rejestracja</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" type="text/css"/>
 </head>
 <body>
-<form action="/register" method="post">
-    <div class="container">
-        <h1>Register</h1>
-        <p>Please fill in this form to create an account.</p>
-        <hr>
+<div style="display: flex; flex-direction: column; justify-content: space-between; height: 100vh; width: 100vw;">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" th:href=@{/}>Booksale.pl</a>
+            <button aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation"
+                    class="navbar-toggler"
+                    data-target="#navbarNavAltMarkup" data-toggle="collapse" type="button">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="justify-content-between flex-box collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link active" th:href="@{/books}">Książki</a>
+                    <a class="nav-item nav-link active" th:href="@{/orders}">Zamówienia</a>
+                </div>
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link active" sec:authorize="!isAuthenticated()" th:href="@{/login}">Zaloguj
+                        się</a>
+                    <a class="nav-item nav-link active" sec:authorize="isAuthenticated()" th:href="@{/logout}">Wyloguj
+                        się</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main style="display: flex; flex-direction: column; height: 100%; overflow: hidden;">
+        <div class="m-1 p-2" style="width: 100%; height: 100%;">
+            <div class="card-body text-center" style="display: flex; flex-direction: column; height: 100%;">
+                <div class="pb-2" style="display: flex; justify-content: center;">
+                    <h3>Rejestracja</h3>
+                    <div class="alert alert-success text-center" style="margin: 0;" th:if="${message}">
+                        [[${message}]]
+                    </div>
+                    <div class="alert alert-danger text-center" style="margin: 0;" th:if="${message_fail}">
+                        [[${message_fail}]]
+                    </div>
+                </div>
 
-        <label for="username">
-            <b>Username</b>
-        </label>
-        <input id="username" name="username" placeholder="Enter Username" required type="text">
+                <form action="/register" method="post">
+                    <div class="container">
+                        <p>Wypełnij formularz, aby założyć konto.</p>
+                        <hr>
 
-        <label for="password"><b>Password</b></label>
-        <input id="password" name="password" placeholder="Enter Password" required type="password">
+                        <div>
+                            <label>
+                                <div>Nazwa użytkownika:</div>
+                                <input name="username" type="text"/> </label>
+                        </div>
+                        <div>
+                            <label>
+                                <div>Hasło:</div>
+                                <input name="password" type="password"/> </label>
+                        </div>
 
-        <button class="registerbtn" type="submit">Register</button>
-    </div>
+                        <div style="display: flex; justify-content: center; gap: 15px; padding-top: 15px;">
+                            <button class="btn btn-primary" type="submit">Zarejestruj</button>
+                        </div>
+                    </div>
 
-</form>
+                </form>
+            </div>
+        </div>
+    </main>
+    <footer class="bg-light text-center text-lg-start">
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            © 2022 Przemysław Sałek -
+            <a class="text-dark" href="https://github.com/PrzemyslawSalek/ske-project">Ske-Project</a>
+        </div>
+    </footer>
+</div>
 </body>
 </html>

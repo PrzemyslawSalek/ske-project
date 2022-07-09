@@ -6,56 +6,109 @@
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" type="text/css"/>
 </head>
 <body>
-<div class="container-fluid text-center">
-    <h1>Zarządzaj książkami!</h1>
-    <div class="m-2">
-        <a class="h3" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/books/add}">Dodaj nową książkę</a>
-    </div>
+<div style="display: flex; flex-direction: column; justify-content: space-between; height: 100vh; width: 100vw;">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" th:href=@{/}>Booksale.pl</a>
+            <button aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation"
+                    class="navbar-toggler"
+                    data-target="#navbarNavAltMarkup" data-toggle="collapse" type="button">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="justify-content-between flex-box collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link active" th:href="@{/books}">Książki</a>
+                    <a class="nav-item nav-link active" th:href="@{/orders}">Zamówienia</a>
+                </div>
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link active" sec:authorize="!isAuthenticated()" th:href="@{/login}">Zaloguj
+                        się</a>
+                    <a class="nav-item nav-link active" sec:authorize="isAuthenticated()" th:href="@{/logout}">Wyloguj
+                        się</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main style="display: flex; flex-direction: column; height: 100%; overflow: hidden;">
+        <div class="m-1 p-2" style="width: 100%; height: 100%;">
+            <div class="card-body text-center" style="display: flex; flex-direction: column; height: 100%;">
+                <div class="pb-2" style="display: flex; justify-content: space-between;">
+                    <h3>Zarządzaj książkami</h3>
+                    <a sec:authorize="hasRole('ROLE_USER')" class="pr-3" style="color: black; display: flex;" th:href="@{/cart}">
+                        <div class="alert alert-success text-center" style="margin: 0;" th:if="${message}">
+                            [[${message}]]
+                        </div>
+                        <img alt="Koszyk" class="m-2"
+                             src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Shopping_cart_icon.svg/2501px-Shopping_cart_icon.svg.png"
+                             style="height: 26px; width: 26px"/>
+                        <div style="align-self: center;">Koszyk</div>
+                    </a>
+                    <a sec:authorize="hasRole('ROLE_ADMIN')" class="pr-3" style="color: black; display: flex;" th:href="@{/books/add}">
+                        <div class="alert alert-success text-center" style="margin: 0;" th:if="${message}">
+                            [[${message}]]
+                        </div>
+                        <img alt="Dodaj książkę" class="m-2"
+                             src="https://cdn.pixabay.com/photo/2014/04/02/10/55/plus-304947_1280.png"
+                             style="height: 26px; width: 26px"/>
+                        <div style="align-self: center;">Dodaj nową książkę</div>
+                    </a>
+                </div>
 
-    <div class="alert alert-success text-center" th:if="${message}">
-        [[${message}]]
-    </div>
+                <div>
+                    <table class="table table-bordered">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nazwa</th>
+                            <th>Cena</th>
+                            <th>Wydawnictwo</th>
+                            <th>Kategoria</th>
+                            <th>Opcje</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <th:block th:each="book : ${listBooks}">
+                            <tr>
+                                <td>[[${book.id}]]</td>
+                                <td>[[${book.name}]]</td>
+                                <td>[[${book.price}]]</td>
+                                <td>[[${book.publishing}]]</td>
+                                <td>[[${book.category.name}]]</td>
+                                <td>
+                                    <div style="display: inline-flex; gap: 20px;">
+                                    <a class="btn btn-primary" sec:authorize="hasRole('ROLE_ADMIN')"
+                                       th:href="@{'/books/edit/' + ${book.id}}">Edytuj</a>
+                                    <a class="btn btn-secondary" sec:authorize="hasRole('ROLE_ADMIN')"
+                                       th:href="@{'/books/delete/' + ${book.id}}">Usuń</a>
+                                    </div>
 
-    <div>
-        <table class="table table-bordered">
-            <thead class="thead-dark">
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Publishing</th>
-                <th>Category</th>
-
-                <th sec:authorize="hasRole('ROLE_ADMIN')">Edytuj/Usuń</th>
-
-                <th sec:authorize="hasRole('ROLE_USER')">Do koszyka</th>
-            </tr>
-            </thead>
-            <tbody>
-            <th:block th:each="book : ${listBooks}">
-                <tr>
-                    <td>[[${book.id}]]</td>
-                    <td>[[${book.name}]]</td>
-                    <td>[[${book.price}]]</td>
-                    <td>[[${book.publishing}]]</td>
-                    <td>[[${book.category.name}]]</td>
-                    <td sec:authorize="hasRole('ROLE_ADMIN')">
-                        <a class="h2 mr-3"
-                           th:href="@{'/books/edit/' + ${book.id}}">Edytuj</a>
-                        <a class="h2 mr-3"
-                           th:href="@{'/books/delete/' + ${book.id}}">Usuń</a>
-                    </td>
-                    <td sec:authorize="hasRole('ROLE_USER')">
-                        <form method="post" th:action="${'/cart/add'}">
-                            <input id="bookId" name="bookId" th:value="${book.id}" type="hidden"/>
-                            <button type="submit">Do koszyka</button>
-                        </form>
-                    </td>
-                </tr>
-            </th:block>
-            </tbody>
-        </table>
-    </div>
+                                    <div style="display: inline-flex; gap: 20px;">
+                                        <form method="post" sec:authorize="hasRole('ROLE_USER')"
+                                              th:action="${'/cart/add'}">
+                                            <input id="bookId" name="bookId" th:value="${book.id}" type="hidden"/>
+                                            <button class="btn btn-primary" type="submit">Dodaj do koszyka</button>
+                                        </form>
+                                        <form method="post" sec:authorize="hasRole('ROLE_USER')"
+                                              th:action="${'/cart/delete'}">
+                                            <input id="bookId" name="bookId" th:value="${book.id}" type="hidden"/>
+                                            <button class="btn btn-secondary" type="submit">Usuń z koszyka</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        </th:block>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="bg-light text-center text-lg-start">
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            © 2022 Przemysław Sałek -
+            <a class="text-dark" href="https://github.com/PrzemyslawSalek/ske-project">Ske-Project</a>
+        </div>
+    </footer>
 </div>
 </body>
 </html>
